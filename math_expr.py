@@ -25,6 +25,17 @@ def calc(expression):
                 current_token = ''
         if current_token:
             tokens.append(current_token)
+
+        #handling unary - operator
+        if tokens[0] == '-':
+            tokens.insert(0, '0')
+            tokens.insert(0, '(')
+            tokens.insert(4, ')')
+        
+        n = len(tokens)
+        for i in range(n - 1):
+            if tokens[i] == '(' and tokens[i + 1] == '-':
+                tokens.insert(i + 1, 0)
             
         postfix_list = []
         operator_stack = []
@@ -34,7 +45,7 @@ def calc(expression):
             if is_float(token):
                 postfix_list.append(token)
             elif token in operators:
-                while operator_stack and operators[token][0] <= operators[operator_stack[-1]][0]:
+                while operator_stack and operator_stack[-1] in operators and operators[token][0] <= operators[operator_stack[-1]][0]:
                     postfix_list.append(operator_stack.pop())
                 operator_stack.append(token)
             elif token == '(':
@@ -58,3 +69,4 @@ def calc(expression):
 
 calc("-7 * -(6 / 3)")
 calc("3 -(-1)")
+calc("2 + 3 + 8 * 16")
