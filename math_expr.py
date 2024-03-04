@@ -14,7 +14,7 @@ def is_float(string):
 def tokenize(expression):
     tokens = []
     current_token = ''
-    #tokenize the expression
+    # tokenize the expression
     for char in expression:
         if char.isdigit() or char == '.':
             current_token += char
@@ -27,10 +27,8 @@ def tokenize(expression):
         tokens.append(current_token)
     
     for i, token in enumerate(tokens):
-        if token == '-' and (i == 0 or (tokens[i - 1] in operators or tokens[i - 1] in ['(',')'])):
+        if token == '-' and (i == 0 or (tokens[i - 1] in operators or tokens[i - 1] == '(')):
             tokens[i] = 'u'
-
-    print(tokens)
 
     return tokens
 
@@ -56,14 +54,23 @@ def calc(expression):
             
         while operator_stack:
             postfix_list.append(operator_stack.pop())
-            
-        return (postfix_list)
-        
-    print(infix_to_postfix())
-        
-    return 1
 
+        return postfix_list
 
-calc("-7 * -(6 / 3)")
-calc("3 -(-1)")
-calc("2 + 3 + 8 * 16")
+    def evaluate(postfix):
+        stack = []
+        for token in postfix:
+            if token in operators:
+                if operators[token][1] == 'right':  # Unary operator
+                    operand = stack.pop()
+                    result = operators[token][2](operand)
+                else:  # Binary operator
+                    operand2 = stack.pop()
+                    operand1 = stack.pop()
+                    result = operators[token][2](operand1, operand2)
+                stack.append(result)
+            else:
+                stack.append(float(token))
+        return stack.pop()
+
+    return evaluate(infix_to_postfix())
