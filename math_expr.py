@@ -14,7 +14,7 @@ def is_float(string):
 def tokenize(expression):
     tokens = []
     current_token = ''
-    # tokenize the expression
+    #  tokenize the expression
     for char in expression:
         if char.isdigit() or char == '.':
             current_token += char

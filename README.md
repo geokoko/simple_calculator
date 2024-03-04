@@ -1,4 +1,3 @@
 # Evaluate Mathematical Expression
 
-1.Does not handle negative numbers yet correctly. <br />
-2.Does not calculate the result. Only converts to postfix notation
+Problem details here: https://www.codewars.com/kata/52a78825cdfc2cfc87000005/python
