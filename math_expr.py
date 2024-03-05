@@ -2,7 +2,8 @@ operators = {'+': (1, 'left', lambda x, y: x + y),
              '-': (1, 'left', lambda x, y: x - y),
              '*': (2, 'left', lambda x, y: x * y),
              '/': (2, 'left', lambda x, y: x / y),
-             'u': (3, 'right', lambda x: -x)}
+             'u': (3, 'right', lambda x: -x),
+             'p': (3, 'right', lambda x: x)}
 
 def is_float(string):
     try:
@@ -29,11 +30,18 @@ def tokenize(expression):
     for i, token in enumerate(tokens):
         if token == '-' and (i == 0 or (tokens[i - 1] in operators or tokens[i - 1] == '(')):
             tokens[i] = 'u'
+    
+    # Combine 2 unary operators to a '+'
+    for token in tokens:
+        if token == 'u':
+            if tokens[tokens.index(token) + 1] == 'u':
+                tokens[tokens.index(token)] = 'p'
+                tokens.pop(tokens.index('u'))
 
     return tokens
 
-def calc(expression):  
-    def infix_to_postfix():
+def calc(expr):  
+    def infix_to_postfix(expression):
         tokens = tokenize(expression)
         postfix_list = []
         operator_stack = []
@@ -55,6 +63,8 @@ def calc(expression):
         while operator_stack:
             postfix_list.append(operator_stack.pop())
 
+        print(postfix_list)
+
         return postfix_list
 
     def evaluate(postfix):
@@ -66,11 +76,14 @@ def calc(expression):
                     result = operators[token][2](operand)
                 else:  # Binary operator
                     operand2 = stack.pop()
-                    operand1 = stack.pop()
-                    result = operators[token][2](operand1, operand2)
+                    if stack:
+                        operand1 = stack.pop()
+                        result = operators[token][2](operand1, operand2)
+                    else:
+                        result = operators[token][2](operand2)
                 stack.append(result)
             else:
                 stack.append(float(token))
         return stack.pop()
 
-    return evaluate(infix_to_postfix())
+    return evaluate(infix_to_postfix(expr))
