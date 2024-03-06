@@ -1,3 +1,3 @@
-# Evaluate Mathematical Expression
+# Simple Calculator App
 
-Problem details here: https://www.codewars.com/kata/52a78825cdfc2cfc87000005/python
+A simple calculator app according to this question: https://www.codewars.com/kata/52a78825cdfc2cfc87000005/python
