@@ -6,12 +6,13 @@ def on_button_click(char):
     if char == '=':
         try:
             result = calc(entry.get())
-            entry.delete(0, tk.END)
-            entry.insert(0, result)
+            entry.set(int(result) if result.is_integer() else round(result, 9))
         except:
             entry.set('Error')
     elif char == 'C':
-        entry.delete(0, tk.END)
+        entry.set('')
+    elif char == 'Del':
+        entry.set(entry.get()[:-1])
     else:
         current_text = entry.get()
         entry.set(current_text + char)
@@ -23,18 +24,26 @@ root.title('Calculator')
 entry = tk.StringVar() # variable to keep track of the entry field
 
 display = ttk.Entry(root, textvariable=entry, font=('Arial', 24), justify='right')
-display.grid(row=0, column=0, columnspan=4, sticky='ew')
+display.grid(row=0, column=0, columnspan=4, sticky='nsew')
 
 buttons = [
-    '7', '8', '9', '/',
-    '4', '5', '6', '*',
-    '1', '2', '3', '-',
-    '0', '.', '=', '+'
+    'Del', '(', ')', 'mod', '^',
+    '7', '8', '9', '+', '√',
+    '4', '5', '6', '-', 'x²',
+    '1', '2', '3', '*', '=',
+    '0', '.', '%', '/', 'C'
 ]
 
 for button in buttons:
-    ans = ttk.Button(root, text=button, command=lambda button=button: on_button_click(button))
-    ans.grid(row=buttons.index(button) // 4 + 1, column=buttons.index(button) % 4, sticky='nsew')
+    if button == 'Del':
+        btn = tk.Button(root, text=button, fg="white", bg="red", activeforeground="red", activebackground="white", command=lambda char=button: on_button_click(char))
+    elif button == 'C':
+        btn = tk.Button(root, text=button, fg="white", bg="red", activeforeground="red", activebackground="white", command=lambda char=button: on_button_click(char))
+    elif button == '=':
+        btn = tk.Button(root, text=button, fg="white", bg="green", activeforeground="green", activebackground="white", command=lambda char=button: on_button_click(char))
+    else:
+        btn = tk.Button(root, text=button, fg="white", bg="grey", activeforeground="grey", activebackground="white", command=lambda char=button: on_button_click(char))
+    btn.grid(row=buttons.index(button) // 5 + 1, column=buttons.index(button) % 5, sticky='nsew', ipadx=10, ipady=10)
 
 for i in range(5):
     root.grid_rowconfigure(i, weight=1)

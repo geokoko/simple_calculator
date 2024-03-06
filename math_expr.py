@@ -63,8 +63,6 @@ def calc(expr):
         while operator_stack:
             postfix_list.append(operator_stack.pop())
 
-        print(postfix_list)
-
         return postfix_list
 
     def evaluate(postfix):
